@@ -64,7 +64,6 @@ class todo_item(Resource):
         return jsonify(todos)
         # return todos
 
-
     def item_query(self):
 
         conn = pymysql.connect(
@@ -80,12 +79,11 @@ class todo_item(Resource):
         # print("request value : " , value1 )
 
         # user_sql = "select * from user where id = " + str(value1)
-        user_sql = "select name from user "
+        sql = "select name from todo_item "
         with conn:
             cur = conn.cursor()
-            cur.execute(user_sql)
+            cur.execute(sql)
             rows = cur.fetchall()
-
 
         # json_return = json.dumps(rows)
 
@@ -93,8 +91,48 @@ class todo_item(Resource):
 
         return rows
 
+class todo_add(Resource):
+    def post(self):
+        # self.item_query();
+        # todos = self.item_query();
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('item', type=str)
+        args = parser.parse_args()
+
+        item = args['item']
+
+        result = self.add_item(item)
+
+        # print(item,result)
+
+        return "{ 'message': 'SUCCESS' }"
+        # return todos
+
+    def add_item(self, item):
+
+        conn = pymysql.connect(
+            user='test',
+            passwd='test1234',
+            host='localhost',
+            db='testdb',
+            charset='utf8',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+
+        sql = "insert into todo_items (name) values ('" + str(item) + "')"
+
+        print (sql)
+        with conn:
+            cur = conn.cursor()
+            cur.execute(sql)
+
+        return 1 
+
 #api
 api.add_resource(todo_item, '/todos')
+api.add_resource(todo_add, '/additem')
 
 
 if __name__ == '__main__':
