@@ -9,8 +9,14 @@ from flask_restful import Resource, Api
 from flask_restful import reqparse
 from flask import jsonify
 
+from flask_cors import CORS
+
+
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
+import logging
+
+logging.getLogger('flask_cors').level = logging.DEBUG
 
 
 app = Flask(__name__)
@@ -18,6 +24,8 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
 # auth = HTTPBasicAuth()
+
+CORS(app)
 
 
 users = {
@@ -34,7 +42,10 @@ todos = [{
 },
     {
         "name": "안녕"
-}
+    },
+    {
+        "name": "Hello Semi"
+    }
 ]
 
 api = Api(app)
