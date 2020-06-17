@@ -79,7 +79,7 @@ class todo_item(Resource):
         # print("request value : " , value1 )
 
         # user_sql = "select * from user where id = " + str(value1)
-        sql = "select name from todo_item "
+        sql = "select name from todo_items "
         with conn:
             cur = conn.cursor()
             cur.execute(sql)
@@ -97,16 +97,16 @@ class todo_add(Resource):
         # todos = self.item_query();
 
         parser = reqparse.RequestParser()
-        parser.add_argument('item', type=str)
+        parser.add_argument('name', type=str)
         args = parser.parse_args()
 
-        item = args['item']
+        item = args['name']
 
         result = self.add_item(item)
 
         # print(item,result)
 
-        return "{ 'message': 'SUCCESS' }"
+        return "{ 'name': '" + str(item) + "'}"
         # return todos
 
     def add_item(self, item):
@@ -130,9 +130,48 @@ class todo_add(Resource):
 
         return 1 
 
+class todo_del(Resource):
+    def post(self):
+        # self.item_query();
+        # todos = self.item_query();
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str)
+        args = parser.parse_args()
+
+        item = args['name']
+
+        result = self.del_item(item)
+
+        # print(item,result)
+
+        return "{ 'name': '" + str(item) + "'}"
+        # return todos
+
+    def del_item(self, item):
+
+        conn = pymysql.connect(
+            user='test',
+            passwd='test1234',
+            host='localhost',
+            db='testdb',
+            charset='utf8',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+        sql = "delete from todo_items where name ='" + str(item) + "'"
+
+        print (sql)
+        with conn:
+            cur = conn.cursor()
+            cur.execute(sql)
+
+        return 1 
+
 #api
 api.add_resource(todo_item, '/todos')
 api.add_resource(todo_add, '/additem')
+api.add_resource(todo_del, '/delitem')
 
 
 if __name__ == '__main__':
