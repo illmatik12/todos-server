@@ -34,25 +34,19 @@ app.config['JSON_AS_ASCII'] = False
 CORS(app)
 
 
-users = {
-        "semi": generate_password_hash("love")
-}
-todos = [{
-    "name": "청소"
-},
-    {
-        "name": "블로그 쓰기"
-},
-    {
-        "name": "밥먹기"
-},
-    {
-        "name": "안녕"
-    },
-    {
-        "name": "Hello Semi"
-    }
-]
+# todos = [{
+#     "name": "청소"
+# },
+#     {
+#         "name": "블로그 쓰기"
+# },
+#     {
+#         "name": "밥먹기"
+# },
+#     {
+#         "name": "안녕"
+#     }
+# ]
 
 api = Api(app)
 
