@@ -2,3 +2,4 @@ flask-restful
 flask-sqlalchemy
 flask_httpauth
 flask_cors
+pymysql

@@ -16,6 +16,12 @@ from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 
+#DB
+import pymysql
+
+import json
+
+
 logging.getLogger('flask_cors').level = logging.DEBUG
 
 
@@ -53,7 +59,39 @@ api = Api(app)
 
 class todo_item(Resource):
     def get(self):
-        return jsonify(todos);
+        # self.item_query();
+        todos = self.item_query();
+        return jsonify(todos)
+        # return todos
+
+
+    def item_query(self):
+
+        conn = pymysql.connect(
+            user='test',
+            passwd='test1234',
+            host='localhost',
+            db='testdb',
+            charset='utf8',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+        # value1 = request.form['item_id']
+        # print("request value : " , value1 )
+
+        # user_sql = "select * from user where id = " + str(value1)
+        user_sql = "select name from user "
+        with conn:
+            cur = conn.cursor()
+            cur.execute(user_sql)
+            rows = cur.fetchall()
+
+
+        # json_return = json.dumps(rows)
+
+        # print(json_return)
+
+        return rows
 
 #api
 api.add_resource(todo_item, '/todos')
